@@ -3,6 +3,7 @@ package com.ysen.tmall.service.impl;
 import com.ysen.tmall.entity.Category;
 import com.ysen.tmall.mapper.CategoryMapper;
 import com.ysen.tmall.service.CategoryService;
+import com.ysen.tmall.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryMapper categoryMapper;
 
-    public List<Category> list(){
-        return categoryMapper.list();
+    @Override
+    public List<Category> list(Page page) {
+        return categoryMapper.list(page);
+    }
+
+    @Override
+    public int total() {
+        return categoryMapper.total();
     }
 }
