@@ -1,7 +1,6 @@
 package com.ysen.tmall.entity;
 
 public class Category {
-
     private Integer id;
 
     private String name;
