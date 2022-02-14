@@ -71,4 +71,10 @@ public class ForeController {
         return "redirect:forehome";
     }
 
+    @RequestMapping("forelogout")
+    public String logout( HttpSession session) {
+        session.removeAttribute("user");
+        return "redirect:forehome";
+    }
+
 }
