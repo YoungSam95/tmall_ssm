@@ -2,12 +2,16 @@ package com.ysen.tmall.service.impl;
 
 import com.ysen.tmall.entity.Order;
 import com.ysen.tmall.entity.OrderExample;
+import com.ysen.tmall.entity.OrderItem;
 import com.ysen.tmall.entity.User;
 import com.ysen.tmall.mapper.OrderMapper;
+import com.ysen.tmall.service.OrderItemService;
 import com.ysen.tmall.service.OrderService;
 import com.ysen.tmall.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +22,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    OrderItemService orderItemService;
 
     @Override
     public void add(Order c) {
@@ -54,6 +61,32 @@ public class OrderServiceImpl implements OrderService {
         int uid = o.getUid();
         User u = userService.get(uid);
         o.setUser(u);
+    }
+
+    @Override
+    @Transactional(propagation= Propagation.REQUIRED,rollbackForClassName="Exception")
+
+    public float add(Order o, List<OrderItem> ois) {
+        float total = 0;
+        add(o);
+
+        if(false)
+            throw new RuntimeException();
+
+        for (OrderItem oi: ois) {
+            oi.setOid(o.getId());
+            orderItemService.update(oi);
+            total+=oi.getProduct().getPromotePrice()*oi.getNumber();
+        }
+        return total;
+    }
+
+    @Override
+    public List list(int uid, String excludedStatus) {
+        OrderExample example =new OrderExample();
+        example.createCriteria().andUidEqualTo(uid).andStatusNotEqualTo(excludedStatus);
+        example.setOrderByClause("id desc");
+        return orderMapper.selectByExample(example);
     }
 
 }

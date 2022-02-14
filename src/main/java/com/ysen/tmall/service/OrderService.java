@@ -1,6 +1,7 @@
 package com.ysen.tmall.service;
 
 import com.ysen.tmall.entity.Order;
+import com.ysen.tmall.entity.OrderItem;
 
 import java.util.List;
 
@@ -22,4 +23,8 @@ public interface OrderService {
     Order get(int id);
 
     List list();
+
+    float add(Order c,List<OrderItem> ois);
+
+    List list(int uid, String excludedStatus);
 }
